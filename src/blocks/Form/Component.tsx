@@ -1,21 +1,33 @@
 'use client'
 import type { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-builder/types'
-
+import { FlexBuilder } from './extendedTypes'
+import { DateField, fields, FileField } from './fields'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import RichText from '@/components/RichText'
 import { Button } from '@/components/ui/button'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
-
-import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
+
+// watch the magic unfold below
+interface FormFieldBlockExtensions {
+  readonly DateField: DateField
+  readonly FileField: FileField
+}
+
+type CustomFormFieldBlockBuilder = FlexBuilder.Builder<FormFieldBlock, FormFieldBlockExtensions>
+type CustomFormFieldBlock = FlexBuilder.GetType<
+  CustomFormFieldBlockBuilder['with']['DateField']['with']['FileField']
+>
 
 export type FormBlockType = {
   blockName?: string
   blockType?: 'formBlock'
   enableIntro: boolean
-  form: FormType
+  form: FormType & {
+    fields: CustomFormFieldBlock[]
+  }
   introContent?: SerializedEditorState
 }
 
@@ -47,7 +59,7 @@ export const FormBlock: React.FC<
   const router = useRouter()
 
   const onSubmit = useCallback(
-    (data: FormFieldBlock[]) => {
+    (data: CustomFormFieldBlock[]) => {
       let loadingTimerID: ReturnType<typeof setTimeout>
       const submitForm = async () => {
         setError(undefined)

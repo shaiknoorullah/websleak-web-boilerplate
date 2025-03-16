@@ -2,6 +2,7 @@ import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { Plugin } from 'payload'
@@ -13,6 +14,7 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
+import { customFieldsConfig } from '@/blocks/Form/config'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
@@ -55,9 +57,36 @@ export const plugins: Plugin[] = [
     generateTitle,
     generateURL,
   }),
+  s3Storage({
+    collections: {
+      media: true,
+    },
+    bucket: process.env.S3_BUCKET || '',
+    config: {
+      credentials: {
+        accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+      },
+      region: process.env.S3_REGION,
+      endpoint: process.env.S3_ENDPOINT,
+      forcePathStyle: true,
+    },
+  }),
   formBuilderPlugin({
     fields: {
       payment: false,
+      checkbox: true,
+      country: true,
+      email: true,
+      message: true,
+      number: true,
+      select: true,
+      state: true,
+      text: true,
+      textarea: true,
+      // Custom fields
+      date: customFieldsConfig.date,
+      file: customFieldsConfig.file,
     },
     formOverrides: {
       fields: ({ defaultFields }) => {
@@ -76,13 +105,24 @@ export const plugins: Plugin[] = [
               }),
             }
           }
+          // if ('name' in field && field.name === 'fields' && field.type === 'blocks') {
+          //   return {
+          //     ...field,
+          //     blocks: [
+          //       ...(Array.isArray(field.blocks) ? field.blocks : []),
+          //       DateBlock, // Make sure DateBlock has a fields array
+          //       FileBlock, // Make sure FileBlock has a fields array
+          //     ],
+          //   }
+          // }
+
           return field
         })
       },
     },
   }),
   searchPlugin({
-    collections: ['posts'],
+    collections: ['posts', 'pages'],
     beforeSync: beforeSyncWithSearch,
     searchOverrides: {
       fields: ({ defaultFields }) => {
