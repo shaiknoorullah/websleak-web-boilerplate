@@ -188,7 +188,7 @@ export const customFieldsConfig: FieldsConfig = {
       // components: {
       //   Field: {
       //     exportName: 'File',
-      //     path: '/blocks/Form/File',
+      //     path: '@/blocks/Form/File',
       //   }, // If you have a custom admin component
       // },
     },

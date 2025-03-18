@@ -1,3 +1,4 @@
+'use-client'
 import { Checkbox } from './Checkbox'
 import { Country } from './Country'
 import { DateComponent } from './Date'

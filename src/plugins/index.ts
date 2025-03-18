@@ -105,17 +105,6 @@ export const plugins: Plugin[] = [
               }),
             }
           }
-          // if ('name' in field && field.name === 'fields' && field.type === 'blocks') {
-          //   return {
-          //     ...field,
-          //     blocks: [
-          //       ...(Array.isArray(field.blocks) ? field.blocks : []),
-          //       DateBlock, // Make sure DateBlock has a fields array
-          //       FileBlock, // Make sure FileBlock has a fields array
-          //     ],
-          //   }
-          // }
-
           return field
         })
       },

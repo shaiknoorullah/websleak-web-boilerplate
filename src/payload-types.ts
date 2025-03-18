@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    'global-config': GlobalConfig;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -87,6 +88,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    'global-config': GlobalConfigSelect<false> | GlobalConfigSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -760,6 +762,34 @@ export interface FileField {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "global-config".
+ */
+export interface GlobalConfig {
+  id: number;
+  name: string;
+  logo?: (number | null) | Media;
+  favicon?: (number | null) | Media;
+  fonts?:
+    | {
+        name: string;
+        value: string;
+        source?: ('google' | 'custom') | null;
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  colorPalette?:
+    | {
+        name: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -954,6 +984,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'global-config';
+        value: number | GlobalConfig;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1311,6 +1345,33 @@ export interface UsersSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "global-config_select".
+ */
+export interface GlobalConfigSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  favicon?: T;
+  fonts?:
+    | T
+    | {
+        name?: T;
+        value?: T;
+        source?: T;
+        url?: T;
+        id?: T;
+      };
+  colorPalette?:
+    | T
+    | {
+        name?: T;
+        value?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1718,6 +1779,116 @@ export interface TaskSchedulePublish {
     user?: (number | null) | User;
   };
   output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ICustomButtonBlock".
+ */
+export interface ICustomButtonBlock {
+  /**
+   * Choose the HTML button type
+   */
+  buttonType: 'button' | 'submit' | 'reset';
+  /**
+   * The text to display on the button
+   */
+  text: string;
+  /**
+   * Add an external link (leave empty if using page reference)
+   */
+  url?: string | null;
+  /**
+   * Link to an internal page (takes precedence over external URL)
+   */
+  internalLink?: {
+    relationTo: 'pages';
+    value: number | Page;
+  } | null;
+  newTab?: boolean | null;
+  size?: ('xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+  variant?:
+    | (
+        | 'primary'
+        | 'secondary'
+        | 'success'
+        | 'danger'
+        | 'warning'
+        | 'info'
+        | 'light'
+        | 'dark'
+        | 'outline-primary'
+        | 'outline-secondary'
+        | 'ghost'
+        | 'link'
+      )
+    | null;
+  width?: ('auto' | 'full') | null;
+  hasIcon?: boolean | null;
+  iconConfig?: {
+    iconName?:
+      | ('arrow-right' | 'arrow-left' | 'download' | 'upload' | 'external-link' | 'plus' | 'minus' | 'check' | 'x')
+      | null;
+    iconPosition?: ('left' | 'right') | null;
+    iconSize?: ('sm' | 'md' | 'lg') | null;
+  };
+  /**
+   * Fine-tune the appearance of the button
+   */
+  advancedStyling?: {
+    /**
+     * Override text color (e.g., #ffffff or rgb(255,255,255))
+     */
+    textColor?: string | null;
+    /**
+     * Override background color
+     */
+    backgroundColor?: string | null;
+    borderRadius?: ('none' | 'sm' | 'md' | 'lg' | 'full') | null;
+    borderWidth?: ('0' | '1' | '2' | '4') | null;
+    /**
+     * Override border color
+     */
+    borderColor?: string | null;
+    /**
+     * Left/right padding
+     */
+    paddingHorizontal?: ('0' | '1' | '2' | '4' | '6' | '8') | null;
+    /**
+     * Top/bottom padding
+     */
+    paddingVertical?: ('0' | '1' | '2' | '3' | '4' | '5') | null;
+    shadow?: ('none' | 'sm' | 'md' | 'lg') | null;
+    fontWeight?: ('normal' | 'medium' | 'semibold' | 'bold') | null;
+    /**
+     * Add custom Tailwind classes (advanced)
+     */
+    customClasses?: string | null;
+  };
+  interactive?: {
+    hoverEffect?: ('none' | 'darken' | 'lighten' | 'grow' | 'shrink' | 'raise') | null;
+    clickEffect?: ('none' | 'shrink' | 'sink') | null;
+    transitionSpeed?: ('fast' | 'normal' | 'slow') | null;
+  };
+  accessibility?: {
+    /**
+     * Screen reader text (defaults to button text if empty)
+     */
+    ariaLabel?: string | null;
+    /**
+     * Text shown on hover (optional)
+     */
+    title?: string | null;
+  };
+  advanced?: {
+    behavior?: ('normal' | 'smoothScroll' | 'modal') | null;
+    /**
+     * ID of element to scroll to or modal to open
+     */
+    targetId?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'customButton';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

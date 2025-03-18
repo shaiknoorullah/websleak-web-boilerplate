@@ -32,17 +32,17 @@ export const Code: Block = {
               name: 'cta',
               type: 'blocks',
               blocks: [
-                {
-                  slug: 'cta',
-                  fields: [
-                    {
-                      label: 'Call to action',
-                      name: 'cta',
-                      relationTo: 'categories',
-                      type: 'relationship',
-                    },
-                  ],
-                },
+                // {
+                //   slug: 'cta',
+                //   fields: [
+                //     {
+                //       label: 'Call to action',
+                //       name: 'cta',
+                //       relationTo: 'categories',
+                //       type: 'relationship',
+                //     },
+                //   ],
+                // },
               ],
             },
           ],

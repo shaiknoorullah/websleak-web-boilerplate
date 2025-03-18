@@ -21,6 +21,11 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 
+import { ElementBlock } from '@/blocks/Element/config'
+import { HeadingBlock } from '@/blocks/Heading/config'
+import { ButtonBlock } from '@/blocks/Button/config'
+import { LayoutBlock } from '@/blocks/Layout/config'
+
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
   access: {
@@ -63,6 +68,27 @@ export const Pages: CollectionConfig<'pages'> = {
       type: 'text',
       required: true,
     },
+    // {
+    //   name: 'slug',
+    //   type: 'text',
+    //   admin: {
+    //     position: 'sidebar',
+    //   },
+    //   hooks: {
+    //     beforeValidate: [
+    //       (args) => {
+    //         return args.value
+    //           ? args.value
+    //               .toLowerCase()
+    //               .replace(/\s+/g, '-')
+    //               .replace(/[^\w-]+/g, '')
+    //           : ''
+    //       },
+    //     ],
+    //   },
+    //   unique: true,
+    //   index: true,
+    // },
     {
       type: 'tabs',
       tabs: [
