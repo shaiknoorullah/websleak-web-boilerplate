@@ -7,7 +7,6 @@ import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
-import { HomeBlock } from '@/blocks/Home/config'
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -22,10 +21,10 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 
-// import { ElementBlock } from '@/blocks/Element/config'
-// import { HeadingBlock } from '@/blocks/Heading/config'
-// import { ButtonBlock } from '@/blocks/Button/config'
-// import { LayoutBlock } from '@/blocks/Layout/config'
+import { ElementBlock } from '@/blocks/Element/config'
+import { HeadingBlock } from '@/blocks/Heading/config'
+import { ButtonBlock } from '@/blocks/Button/config'
+import { LayoutBlock } from '@/blocks/Layout/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -102,7 +101,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, HomeBlock],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
               required: true,
               admin: {
                 initCollapsed: true,

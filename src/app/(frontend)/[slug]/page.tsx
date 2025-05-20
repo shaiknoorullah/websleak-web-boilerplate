@@ -73,7 +73,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
       {draft && <LivePreviewListener />}
 
-      <RenderHero hero={hero} />
+      <RenderHero {...hero} />
       <RenderBlocks blocks={layout} />
     </article>
   )
@@ -90,54 +90,21 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 
 const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()
+
   const payload = await getPayload({ config: configPromise })
 
-  // First query: Get basic page data
-  const basicResult = await payload.find({
+  const result = await payload.find({
     collection: 'pages',
     draft,
     limit: 1,
-    depth: 0,
     pagination: false,
     overrideAccess: draft,
-    where: { slug: { equals: slug } },
-    select: {
-      id: true,
-      title: true,
-      slug: true,
-      updatedAt: true,
-      createdAt: true,
-      meta: true,
-      _status: true,
+    where: {
+      slug: {
+        equals: slug,
+      },
     },
   })
 
-  if (!basicResult.docs?.[0]) return null
-
-  const pageId = basicResult.docs[0].id
-
-  // Second query: Get hero data separately
-  const heroResult = await payload.findByID({
-    collection: 'pages',
-    id: pageId,
-    draft,
-    depth: 1,
-    select: { hero: true },
-  })
-
-  // Third query: Get layout data separately
-  const layoutResult = await payload.findByID({
-    collection: 'pages',
-    id: pageId,
-    draft,
-    depth: 1,
-    select: { layout: true },
-  })
-
-  // Combine results
-  return {
-    ...basicResult.docs[0],
-    hero: heroResult.hero,
-    layout: layoutResult.layout,
-  }
+  return result.docs?.[0] || null
 })
