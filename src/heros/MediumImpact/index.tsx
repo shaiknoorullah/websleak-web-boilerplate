@@ -6,7 +6,8 @@ import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 
-export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
+export const MediumImpactHero: React.FC<{ hero: Page['hero'] }> = ({ hero }) => {
+  const { links, media, richText } = hero
   return (
     <div className="">
       <div className="container mb-8">
